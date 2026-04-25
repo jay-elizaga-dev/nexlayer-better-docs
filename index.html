@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexlayer MCP — Better Docs</title>
+  <meta name="description" content="Comprehensive Nexlayer MCP documentation. All tools, parameters, nexlayer.yaml reference, and API endpoints in one place." />
+  <meta property="og:title" content="Nexlayer MCP — Better Docs" />
+  <meta property="og:description" content="All Nexlayer MCP tools documented with parameters, examples, and guides." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nexlayer-better-docs.elizaga.dev" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<button class="mobile-menu-btn" id="menuBtn">☰ Menu</button>
+
+<div class="layout">
+
+<!-- ── Sidebar ───────────────────────────────── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <a href="#">
+      Nexlayer MCP
+      <span class="logo-badge">Better Docs</span>
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Getting Started</div>
+    <a class="nav-link active" href="#overview">Overview</a>
+    <a class="nav-link" href="#install">Quick Install</a>
+    <a class="nav-link" href="#quickstart">Quickstart</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">MCP Tools</div>
+    <a class="nav-link" href="#tool-deploy">deploy_application <span class="nav-badge">core</span></a>
+    <a class="nav-link" href="#tool-status">get_deployment_status</a>
+    <a class="nav-link" href="#tool-logs">get_logs</a>
+    <a class="nav-link" href="#tool-domain">configure_domain</a>
+    <a class="nav-link" href="#tool-env">set_environment_variable</a>
+    <a class="nav-link" href="#tool-scale">update_replicas</a>
+    <a class="nav-link" href="#tool-list">list_deployments</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Configuration</div>
+    <a class="nav-link" href="#yaml-schema">nexlayer.yaml Schema</a>
+    <a class="nav-link" href="#yaml-examples">YAML Examples</a>
+    <a class="nav-link" href="#env-vars">Environment Variables</a>
+    <a class="nav-link" href="#volumes">Volumes</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">API Reference</div>
+    <a class="nav-link" href="#api-auth">Authentication</a>
+    <a class="nav-link" href="#api-deploy">Deploy Endpoints</a>
+    <a class="nav-link" href="#api-manage">Manage Endpoints</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Guides</div>
+    <a class="nav-link" href="#guide-domain">Custom Domains</a>
+    <a class="nav-link" href="#guide-scaling">Scaling &amp; Resources</a>
+    <a class="nav-link" href="#guide-service-discovery">Service Discovery</a>
+    <a class="nav-link" href="#guide-health">Health Checks</a>
+  </div>
+</nav>
+
+<!-- ── Main Content ───────────────────────────── -->
+<main class="content">
+
+  <!-- Overview -->
+  <span class="section-anchor" id="overview"></span>
+  <div class="page-header">
+    <h1>Nexlayer MCP — Better Docs</h1>
+    <p>All MCP tools, parameters, and guides in one place. The reference the official docs should have been.</p>
+    <div class="meta">
+      <span class="badge badge-blue">MCP Server</span>
+      <span class="badge badge-green">Live</span>
+      <span class="badge badge-purple">elizaga.dev</span>
+    </div>
+  </div>
+
+  <div class="quick-nav">
+    <a href="#install">Install</a>
+    <a href="#tool-deploy">deploy_application</a>
+    <a href="#tool-status">get_status</a>
+    <a href="#tool-logs">get_logs</a>
+    <a href="#tool-domain">configure_domain</a>
+    <a href="#tool-env">set_env</a>
+    <a href="#tool-scale">update_replicas</a>
+    <a href="#yaml-schema">YAML Schema</a>
+    <a href="#api-deploy">API</a>
+  </div>
+
+  <div class="section">
+    <p>Nexlayer is an AI-native deployment platform. It exposes a <strong>Model Context Protocol (MCP) server</strong> so your AI coding assistant (Claude Code, Cursor, etc.) can deploy and manage containerized applications directly from conversation.</p>
+    <p>The official docs describe what tools exist. This reference tells you <strong>exactly how to call them</strong> — parameters, types, responses, and copy-paste examples.</p>
+  </div>
+
+  <!-- Install -->
+  <span class="section-anchor" id="install"></span>
+  <div class="section">
+    <h2>Quick Install</h2>
+    <p>Auto-detects all installed AI coding tools and configures them simultaneously.</p>
+
+    <div class="code-label">npx (recommended)</div>
+    <div class="install-block">
+      <code>npx @nexlayer/mcp-install</code>
+      <button class="copy-btn" onclick="copyCode(this, 'npx @nexlayer/mcp-install')">Copy</button>
+    </div>
+
+    <h3>Claude Code — Manual Setup</h3>
+    <p>Add the Nexlayer MCP server to your Claude Code settings:</p>
+
+    <div class="code-label">~/.claude/settings.json</div>
+    <pre>{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"nexlayer"</span>: {
+      <span class="key">"type"</span>: <span class="str">"http"</span>,
+      <span class="key">"url"</span>: <span class="str">"https://mcp.nexlayer.ai/api/mcp"</span>
+    }
+  }
+}</pre>
+
+    <h3>WebSocket Bridge (for Claude Code ≤ native ws)</h3>
+    <p>Claude Code supports <code>stdio</code>, <code>sse</code>, and <code>http</code> transports. If you need WebSocket:</p>
+    <div class="install-block">
+      <code>npx nexlayer-mcp-ws@latest install</code>
+      <button class="copy-btn" onclick="copyCode(this, 'npx nexlayer-mcp-ws@latest install')">Copy</button>
+    </div>
+    <p>Or manually:</p>
+    <pre><span class="cmt"># Install bridge globally</span>
+npm install -g nexlayer-mcp-ws
+
+<span class="cmt"># Register with Claude Code</span>
+claude mcp add nexlayer-mcp -- nexlayer-mcp-ws
+
+<span class="cmt"># With auth token</span>
+claude mcp add -e NEXLAYER_MCP_TOKEN=your-token nexlayer-mcp -- nexlayer-mcp-ws</pre>
+
+    <div class="callout callout-note">
+      <div class="callout-title">How the bridge works</div>
+      <p>Claude Code ↔ stdio ↔ nexlayer-mcp-ws ↔ WebSocket ↔ wss://mcp.nexlayer.ai/api/ws. Auto-reconnects with exponential backoff. Keep-alive pings every 30s.</p>
+    </div>
+
+    <h3>Verify Installation</h3>
+    <p>After setup, ask your AI assistant: <em>"List my Nexlayer deployments"</em>. If the MCP is connected, it will call the tools and respond with your deployment list.</p>
+  </div>
+
+  <!-- Quickstart -->
+  <span class="section-anchor" id="quickstart"></span>
+  <div class="section">
+    <h2>Quickstart</h2>
+    <p>Deploy a containerized app to a live URL in under 60 seconds.</p>
+
+    <h3>1. Write nexlayer.yaml</h3>
+    <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">my-app</span>
+
+<span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">web</span>
+    <span class="key">image</span>: <span class="val">nginx:alpine</span>
+    <span class="key">path</span>: <span class="val">/</span>
+    <span class="key">servicePorts</span>: [<span class="num">80</span>]</pre>
+
+    <h3>2. Ask Claude to deploy</h3>
+    <pre><span class="cmt"># In your Claude Code session:</span>
+Deploy my-app using this nexlayer.yaml</pre>
+
+    <p>Claude calls <code>deploy_application</code> and returns a live URL like <code>jolly-tapir-my-app.cloud.nexlayer.ai</code>.</p>
+
+    <h3>3. Check status &amp; logs</h3>
+    <pre><span class="cmt"># Ask Claude:</span>
+What's the status of my-app?
+Show me logs for my-app</pre>
+  </div>
+
+  <!-- MCP Tools -->
+  <span class="section-anchor" id="mcp-tools"></span>
+  <div class="section">
+    <h2>MCP Tools Reference</h2>
+    <p>The Nexlayer MCP server exposes these tools to AI assistants. Each tool maps to an action on your deployments.</p>
+
+    <!-- deploy_application -->
+    <span class="section-anchor" id="tool-deploy"></span>
+    <div class="tool-card open">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-deploy">🚀</div>
+        <div class="tool-meta">
+          <div class="tool-name">deploy_application</div>
+          <div class="tool-desc">Deploy a containerized application using a nexlayer.yaml configuration</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">yaml_config</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Full nexlayer.yaml content as a string</td>
+          </tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-opt">optional</td>
+            <td>Existing session token to associate the deployment with your account. Omit for anonymous/preview deployments.</td>
+          </tr>
+        </table>
+
+        <h4>Returns</h4>
+        <pre>{
+  <span class="key">"message"</span>:         <span class="str">"Deployment started successfully"</span>,
+  <span class="key">"url"</span>:             <span class="str">"https://jolly-tapir-my-app.cloud.nexlayer.ai"</span>,
+  <span class="key">"sessionToken"</span>:    <span class="str">"dCf0NdAQ64j6"</span>,
+  <span class="key">"applicationName"</span>: <span class="str">"my-app"</span>,
+  <span class="key">"environment"</span>:     <span class="str">"jolly-tapir"</span>,
+  <span class="key">"status"</span>:         <span class="str">"starting"</span>
+}</pre>
+
+        <div class="callout callout-tip">
+          <div class="callout-title">Save your session token</div>
+          <p>The <code>sessionToken</code> in the response is required for all subsequent management calls. Store it securely — you'll need it to update, extend, or delete this deployment.</p>
+        </div>
+
+        <h4>Example — Claude prompt</h4>
+        <pre><span class="cmt"># Claude will read your nexlayer.yaml and call deploy_application automatically</span>
+Deploy the application defined in my nexlayer.yaml</pre>
+
+        <h4>Example — API equivalent</h4>
+        <pre>curl -X POST https://app.nexlayer.com/startUserDeployment \
+  -H <span class="str">"Content-Type: text/x-yaml"</span> \
+  --data-binary @nexlayer.yaml</pre>
+      </div>
+    </div>
+
+    <!-- get_deployment_status -->
+    <span class="section-anchor" id="tool-status"></span>
+    <div class="tool-card">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-health">💚</div>
+        <div class="tool-meta">
+          <div class="tool-name">get_deployment_status</div>
+          <div class="tool-desc">Check the health and current state of a running deployment</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">application_name</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Name of the application (from nexlayer.yaml <code>application.name</code>)</td>
+          </tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Session token from the deploy response</td>
+          </tr>
+        </table>
+
+        <h4>Returns</h4>
+        <pre>{
+  <span class="key">"applicationName"</span>: <span class="str">"my-app"</span>,
+  <span class="key">"status"</span>:          <span class="str">"running"</span>,  <span class="cmt">// starting | running | error | stopped</span>
+  <span class="key">"url"</span>:            <span class="str">"https://jolly-tapir-my-app.cloud.nexlayer.ai"</span>,
+  <span class="key">"pods"</span>: [
+    {
+      <span class="key">"name"</span>:    <span class="str">"web"</span>,
+      <span class="key">"status"</span>: <span class="str">"running"</span>,
+      <span class="key">"image"</span>:  <span class="str">"nginx:alpine"</span>
+    }
+  ]
+}</pre>
+
+        <h4>Example prompt</h4>
+        <pre>What's the deployment status of my-app?</pre>
+      </div>
+    </div>
+
+    <!-- get_logs -->
+    <span class="section-anchor" id="tool-logs"></span>
+    <div class="tool-card">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-logs">📋</div>
+        <div class="tool-meta">
+          <div class="tool-name">get_logs</div>
+          <div class="tool-desc">Stream real-time logs from a deployment or specific pod</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">application_name</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Application name</td>
+          </tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Session token</td>
+          </tr>
+          <tr>
+            <td class="param-name">pod_name</td>
+            <td class="param-type">string</td>
+            <td class="param-opt">optional</td>
+            <td>Filter logs to a specific pod. Omit to get logs from all pods.</td>
+          </tr>
+          <tr>
+            <td class="param-name">tail</td>
+            <td class="param-type">number</td>
+            <td class="param-opt">optional</td>
+            <td>Number of recent log lines to return. Default: 100.</td>
+          </tr>
+        </table>
+
+        <h4>Example prompts</h4>
+        <pre><span class="cmt"># All pods</span>
+Show me logs for my-app
+
+<span class="cmt"># Specific pod</span>
+Show logs for the api pod in my-app
+
+<span class="cmt"># Debug: look for errors</span>
+Get the last 200 log lines from my-app and look for errors</pre>
+      </div>
+    </div>
+
+    <!-- configure_domain -->
+    <span class="section-anchor" id="tool-domain"></span>
+    <div class="tool-card">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-domain">🌐</div>
+        <div class="tool-meta">
+          <div class="tool-name">configure_domain</div>
+          <div class="tool-desc">Attach a custom domain to a deployment (auto-provisions SSL)</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">application_name</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Application name</td>
+          </tr>
+          <tr>
+            <td class="param-name">domain</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Custom domain (e.g., <code>www.mysite.com</code> or <code>mysite.com</code>)</td>
+          </tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Session token</td>
+          </tr>
+        </table>
+
+        <h4>DNS Records Required</h4>
+        <p><strong>For subdomains (www.example.com):</strong></p>
+        <pre>Type: CNAME
+Name: www
+Value: cname.nexlayer.dev</pre>
+
+        <p><strong>For root domains (example.com):</strong></p>
+        <pre>Type: A     | Name: @   | Value: 76.76.21.21
+Type: CNAME | Name: www | Value: cname.nexlayer.dev</pre>
+
+        <div class="callout callout-note">
+          <div class="callout-title">SSL is automatic</div>
+          <p>Let's Encrypt certificates are provisioned and renewed automatically. No manual configuration needed.</p>
+        </div>
+
+        <h4>Alternative — nexlayer.yaml</h4>
+        <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">my-app</span>
+  <span class="key">url</span>: <span class="val">www.mysite.com</span>  <span class="cmt"># custom domain goes here</span></pre>
+      </div>
+    </div>
+
+    <!-- set_environment_variable -->
+    <span class="section-anchor" id="tool-env"></span>
+    <div class="tool-card">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-env">⚙️</div>
+        <div class="tool-meta">
+          <div class="tool-name">set_environment_variable</div>
+          <div class="tool-desc">Set or update environment variables on a running deployment</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">application_name</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Application name</td>
+          </tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Session token</td>
+          </tr>
+          <tr>
+            <td class="param-name">key</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Environment variable name (e.g., <code>DATABASE_URL</code>)</td>
+          </tr>
+          <tr>
+            <td class="param-name">value</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Value to set. The deployment restarts automatically.</td>
+          </tr>
+          <tr>
+            <td class="param-name">pod_name</td>
+            <td class="param-type">string</td>
+            <td class="param-opt">optional</td>
+            <td>Target a specific pod. Omit to set across all pods.</td>
+          </tr>
+        </table>
+
+        <h4>Example prompts</h4>
+        <pre><span class="cmt"># Set a secret</span>
+Set DATABASE_URL to postgres://user:pass@postgres.pod:5432/mydb for my-app
+
+<span class="cmt"># Update API key</span>
+Update the OPENAI_API_KEY env var for the api pod in my-app</pre>
+
+        <div class="callout callout-warn">
+          <div class="callout-title">Restarts on change</div>
+          <p>Setting or updating an env var triggers a rolling restart of the affected pods.</p>
+        </div>
+
+        <h4>Inline in nexlayer.yaml</h4>
+        <pre><span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">api</span>
+    <span class="key">vars</span>:
+      <span class="key">DATABASE_URL</span>: <span class="val">"postgres://user:pass@postgres.pod:5432/mydb"</span>
+      <span class="key">REDIS_URL</span>:    <span class="val">"redis://redis.pod:6379"</span>
+      <span class="key">NODE_ENV</span>:     <span class="val">production</span></pre>
+      </div>
+    </div>
+
+    <!-- update_replicas -->
+    <span class="section-anchor" id="tool-scale"></span>
+    <div class="tool-card">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-scale">📈</div>
+        <div class="tool-meta">
+          <div class="tool-name">update_replicas</div>
+          <div class="tool-desc">Scale a pod up or down by adjusting replica count</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">application_name</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Application name</td>
+          </tr>
+          <tr>
+            <td class="param-name">pod_name</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Pod to scale</td>
+          </tr>
+          <tr>
+            <td class="param-name">replicas</td>
+            <td class="param-type">number</td>
+            <td class="param-req">required</td>
+            <td>Target replica count. Setting a fixed value disables auto-scaling for this pod.</td>
+          </tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Session token</td>
+          </tr>
+        </table>
+
+        <h4>Example prompts</h4>
+        <pre><span class="cmt"># Scale up API tier</span>
+Scale the api pod in my-app to 3 replicas
+
+<span class="cmt"># Scale back down</span>
+Set my-app api pod to 1 replica</pre>
+
+        <h4>In nexlayer.yaml</h4>
+        <pre><span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">api</span>
+    <span class="key">replicas</span>: <span class="num">3</span>       <span class="cmt"># fixed — disables auto-scale</span>
+    <span class="key">resources</span>:
+      <span class="key">cpu</span>: <span class="str">"2"</span>        <span class="cmt"># 2 CPU cores</span>
+      <span class="key">memory</span>: <span class="str">"4Gi"</span>   <span class="cmt"># 4 GB RAM</span></pre>
+      </div>
+    </div>
+
+    <!-- list_deployments -->
+    <span class="section-anchor" id="tool-list"></span>
+    <div class="tool-card">
+      <div class="tool-header" onclick="toggleTool(this)">
+        <div class="tool-icon icon-list">📦</div>
+        <div class="tool-meta">
+          <div class="tool-name">list_deployments</div>
+          <div class="tool-desc">List all active deployments for your session</div>
+        </div>
+        <span class="tool-chevron">▶</span>
+      </div>
+      <div class="tool-body">
+        <table class="params-table">
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr>
+            <td class="param-name">session_token</td>
+            <td class="param-type">string</td>
+            <td class="param-req">required</td>
+            <td>Session token to list deployments for</td>
+          </tr>
+        </table>
+
+        <h4>Returns</h4>
+        <pre>[
+  {
+    <span class="key">"applicationName"</span>: <span class="str">"my-app"</span>,
+    <span class="key">"status"</span>:          <span class="str">"running"</span>,
+    <span class="key">"url"</span>:            <span class="str">"https://jolly-tapir-my-app.cloud.nexlayer.ai"</span>,
+    <span class="key">"createdAt"</span>:      <span class="str">"2026-04-25T10:00:00Z"</span>,
+    <span class="key">"expiresAt"</span>:      <span class="str">"2026-04-27T10:00:00Z"</span>
+  }
+]</pre>
+
+        <h4>Example prompt</h4>
+        <pre>List all my Nexlayer deployments</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- YAML Schema -->
+  <span class="section-anchor" id="yaml-schema"></span>
+  <div class="section">
+    <h2>nexlayer.yaml Schema</h2>
+    <p>The single config file that defines your entire deployment. Nexlayer keeps it intentionally minimal.</p>
+
+    <h3>Top-level fields</h3>
+    <div class="schema-section">
+      <div class="schema-field">
+        <span class="schema-key">application<span class="req">*</span></span>
+        <span class="schema-type">object</span>
+        <span class="schema-desc">Application metadata</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">application.name<span class="req">*</span></span>
+        <span class="schema-type">string</span>
+        <span class="schema-desc">Unique identifier for your app. Used in URLs and API calls. Lowercase, hyphens ok.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">application.url</span>
+        <span class="schema-type">string</span>
+        <span class="schema-desc">Custom domain (e.g., <code>www.mysite.com</code>). Omit for preview deployments.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">pods<span class="req">*</span></span>
+        <span class="schema-type">array</span>
+        <span class="schema-desc">Array of container definitions. Each pod is a service in your application.</span>
+      </div>
+    </div>
+
+    <h3>Pod fields</h3>
+    <div class="schema-section">
+      <div class="schema-field">
+        <span class="schema-key">name<span class="req">*</span></span>
+        <span class="schema-type">string</span>
+        <span class="schema-desc">Pod identifier. Used for service discovery: <code>&lt;name&gt;.pod:&lt;port&gt;</code></span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">image<span class="req">*</span></span>
+        <span class="schema-type">string</span>
+        <span class="schema-desc">Docker image reference. Supports Docker Hub (<code>nginx:alpine</code>), GHCR (<code>ghcr.io/org/image:tag</code>), and private registries.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">path<span class="req">*</span></span>
+        <span class="schema-type">string</span>
+        <span class="schema-desc">URL route this pod handles. Use <code>/</code> for the main app, <code>/api</code> for an API service.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">servicePorts<span class="req">*</span></span>
+        <span class="schema-type">number[]</span>
+        <span class="schema-desc">Ports the container listens on. E.g., <code>[80]</code>, <code>[3000]</code>, <code>[5432]</code>.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">vars</span>
+        <span class="schema-type">object</span>
+        <span class="schema-desc">Environment variables as key-value pairs. Supports inter-pod refs via <code>&lt;pod-name&gt;.pod</code>.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">volumes</span>
+        <span class="schema-type">array</span>
+        <span class="schema-desc">Persistent storage. Each volume has <code>name</code>, <code>size</code> (e.g., <code>"2Gi"</code>), and <code>mountPath</code>.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">replicas</span>
+        <span class="schema-type">number</span>
+        <span class="schema-desc">Fixed replica count. Setting this disables auto-scaling. Omit to let Nexlayer auto-scale.</span>
+      </div>
+      <div class="schema-field">
+        <span class="schema-key">resources</span>
+        <span class="schema-type">object</span>
+        <span class="schema-desc">CPU and memory limits. Fields: <code>cpu</code> (e.g., <code>"2"</code>) and <code>memory</code> (e.g., <code>"4Gi"</code>).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- YAML Examples -->
+  <span class="section-anchor" id="yaml-examples"></span>
+  <div class="section">
+    <h2>YAML Examples</h2>
+
+    <h3>Minimal — static site</h3>
+    <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">my-site</span>
+
+<span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">web</span>
+    <span class="key">image</span>: <span class="val">nginx:alpine</span>
+    <span class="key">path</span>: <span class="val">/</span>
+    <span class="key">servicePorts</span>: [<span class="num">80</span>]</pre>
+
+    <h3>Full-stack app (Next.js + PostgreSQL + Redis)</h3>
+    <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">myapp</span>
+  <span class="key">url</span>: <span class="val">www.myapp.com</span>
+
+<span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">web</span>
+    <span class="key">image</span>: <span class="val">ghcr.io/myorg/myapp:latest</span>
+    <span class="key">path</span>: <span class="val">/</span>
+    <span class="key">servicePorts</span>: [<span class="num">3000</span>]
+    <span class="key">vars</span>:
+      <span class="key">DATABASE_URL</span>: <span class="str">"postgres://app:secret@postgres.pod:5432/myapp"</span>
+      <span class="key">REDIS_URL</span>:    <span class="str">"redis://redis.pod:6379"</span>
+      <span class="key">NODE_ENV</span>:     <span class="val">production</span>
+
+  - <span class="key">name</span>: <span class="val">postgres</span>
+    <span class="key">image</span>: <span class="val">postgres:16-alpine</span>
+    <span class="key">path</span>: <span class="val">/db</span>
+    <span class="key">servicePorts</span>: [<span class="num">5432</span>]
+    <span class="key">vars</span>:
+      <span class="key">POSTGRES_USER</span>:     <span class="val">app</span>
+      <span class="key">POSTGRES_PASSWORD</span>: <span class="val">secret</span>
+      <span class="key">POSTGRES_DB</span>:       <span class="val">myapp</span>
+    <span class="key">volumes</span>:
+      - <span class="key">name</span>: <span class="val">pg-data</span>
+        <span class="key">size</span>: <span class="str">"10Gi"</span>
+        <span class="key">mountPath</span>: <span class="str">"/var/lib/postgresql/data"</span>
+
+  - <span class="key">name</span>: <span class="val">redis</span>
+    <span class="key">image</span>: <span class="val">redis:7-alpine</span>
+    <span class="key">path</span>: <span class="val">/cache</span>
+    <span class="key">servicePorts</span>: [<span class="num">6379</span>]</pre>
+
+    <h3>AI inference (LLM serving)</h3>
+    <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">llm-server</span>
+
+<span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">ollama</span>
+    <span class="key">image</span>: <span class="val">ollama/ollama:latest</span>
+    <span class="key">path</span>: <span class="val">/</span>
+    <span class="key">servicePorts</span>: [<span class="num">11434</span>]
+    <span class="key">resources</span>:
+      <span class="key">cpu</span>: <span class="str">"4"</span>
+      <span class="key">memory</span>: <span class="str">"16Gi"</span>
+    <span class="key">volumes</span>:
+      - <span class="key">name</span>: <span class="val">models</span>
+        <span class="key">size</span>: <span class="str">"50Gi"</span>
+        <span class="key">mountPath</span>: <span class="str">"/root/.ollama"</span></pre>
+
+    <h3>Multi-path API gateway</h3>
+    <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">gateway</span>
+
+<span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">web</span>
+    <span class="key">image</span>: <span class="val">myorg/frontend:latest</span>
+    <span class="key">path</span>: <span class="val">/</span>
+    <span class="key">servicePorts</span>: [<span class="num">3000</span>]
+
+  - <span class="key">name</span>: <span class="val">api</span>
+    <span class="key">image</span>: <span class="val">myorg/api:latest</span>
+    <span class="key">path</span>: <span class="val">/api</span>
+    <span class="key">servicePorts</span>: [<span class="num">8080</span>]
+    <span class="key">replicas</span>: <span class="num">3</span>
+    <span class="key">vars</span>:
+      <span class="key">BACKEND_URL</span>: <span class="str">"http://web.pod:3000"</span></pre>
+  </div>
+
+  <!-- Env Vars -->
+  <span class="section-anchor" id="env-vars"></span>
+  <div class="section">
+    <h2>Environment Variables</h2>
+    <p>Set in the <code>vars</code> block per pod, or via the <code>set_environment_variable</code> MCP tool at runtime.</p>
+
+    <h3>Inter-pod references</h3>
+    <p>Pods communicate internally using the <code>&lt;pod-name&gt;.pod:&lt;port&gt;</code> format:</p>
+    <pre><span class="key">vars</span>:
+  <span class="key">DATABASE_URL</span>: <span class="str">"postgres://user:pass@postgres.pod:5432/mydb"</span>
+  <span class="key">REDIS_URL</span>:    <span class="str">"redis://redis.pod:6379"</span>
+  <span class="key">API_URL</span>:      <span class="str">"http://api.pod:8080"</span></pre>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">Inter-pod DNS</div>
+      <p>Nexlayer creates internal DNS entries for each pod. <code>postgres.pod</code> resolves to the postgres pod's internal IP. Traffic stays within the cluster — no external exposure.</p>
+    </div>
+  </div>
+
+  <!-- Volumes -->
+  <span class="section-anchor" id="volumes"></span>
+  <div class="section">
+    <h2>Volumes (Persistent Storage)</h2>
+    <pre><span class="key">volumes</span>:
+  - <span class="key">name</span>: <span class="val">my-data</span>       <span class="cmt"># identifier</span>
+    <span class="key">size</span>: <span class="str">"2Gi"</span>          <span class="cmt"># storage capacity</span>
+    <span class="key">mountPath</span>: <span class="str">"/data"</span>  <span class="cmt"># where it mounts inside the container</span></pre>
+
+    <div class="callout callout-note">
+      <div class="callout-title">Volumes and auto-scaling</div>
+      <p>Pods with persistent volumes don't auto-scale by default (stateful workloads need careful coordination). For high-availability databases, use a managed DB service.</p>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <span class="section-anchor" id="api-auth"></span>
+  <div class="section">
+    <h2>API — Authentication</h2>
+    <p>Base URL: <code>https://app.nexlayer.com</code></p>
+    <p>Nexlayer uses <strong>session tokens</strong> generated when you first deploy. Provide the token as a query parameter or in the request body.</p>
+
+    <pre><span class="cmt"># Query parameter</span>
+GET /getReservations?sessionToken=dCf0NdAQ64j6
+
+<span class="cmt"># Request body</span>
+POST /extendDeployment
+{ <span class="key">"sessionToken"</span>: <span class="str">"dCf0NdAQ64j6"</span>, <span class="key">"applicationName"</span>: <span class="str">"my-app"</span> }</pre>
+  </div>
+
+  <span class="section-anchor" id="api-deploy"></span>
+  <div class="section">
+    <h2>API — Deploy Endpoints</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/startUserDeployment</span>
+        <span class="endpoint-desc">Start a new deployment</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Content-Type:</strong> <code>text/x-yaml</code></p>
+        <p><strong>Query params:</strong> <code>sessionToken</code> (optional)</p>
+        <pre>curl -X POST https://app.nexlayer.com/startUserDeployment \
+  -H <span class="str">"Content-Type: text/x-yaml"</span> \
+  --data-binary @nexlayer.yaml</pre>
+        <p><strong>Response:</strong> <code>{ message, url, sessionToken, applicationName, environment, status }</code></p>
+      </div>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/updateUserDeployment</span>
+        <span class="endpoint-desc">Update running deployment config</span>
+      </div>
+      <div class="endpoint-body">
+        <p><strong>Query params:</strong> <code>sessionToken</code> (required)</p>
+        <pre>curl -X POST \
+  "https://app.nexlayer.com/updateUserDeployment?sessionToken=TOKEN" \
+  -H <span class="str">"Content-Type: text/x-yaml"</span> \
+  --data-binary @nexlayer.yaml</pre>
+      </div>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/extendDeployment</span>
+        <span class="endpoint-desc">Extend deployment lifetime</span>
+      </div>
+      <div class="endpoint-body">
+        <pre>curl -X POST https://app.nexlayer.com/extendDeployment \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d '{ <span class="key">"sessionToken"</span>: <span class="str">"TOKEN"</span>, <span class="key">"applicationName"</span>: <span class="str">"my-app"</span> }'</pre>
+        <p>Free deployments have a limited number of extensions available.</p>
+      </div>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/claimDeployment</span>
+        <span class="endpoint-desc">Make a deployment permanent</span>
+      </div>
+      <div class="endpoint-body">
+        <pre>curl -X POST https://app.nexlayer.com/claimDeployment \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d '{ <span class="key">"sessionToken"</span>: <span class="str">"TOKEN"</span>, <span class="key">"applicationName"</span>: <span class="str">"my-app"</span> }'</pre>
+        <p><strong>Response:</strong> <code>{ claimUrl, claimToken }</code></p>
+      </div>
+    </div>
+  </div>
+
+  <span class="section-anchor" id="api-manage"></span>
+  <div class="section">
+    <h2>API — Manage Endpoints</h2>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-get">GET</span>
+        <span class="endpoint-path">/getReservations</span>
+        <span class="endpoint-desc">List all deployments</span>
+      </div>
+      <div class="endpoint-body">
+        <pre>curl "https://app.nexlayer.com/getReservations?sessionToken=TOKEN"</pre>
+        <p><strong>Response:</strong> Array of <code>{ applicationName, status, url, createdAt, expiresAt }</code></p>
+      </div>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/addDeploymentReservation</span>
+        <span class="endpoint-desc">Reserve a deployment (Scale/Conquer plan)</span>
+      </div>
+      <div class="endpoint-body">
+        <pre>curl -X POST https://app.nexlayer.com/addDeploymentReservation \
+  -d '{ <span class="key">"sessionToken"</span>: <span class="str">"TOKEN"</span>, <span class="key">"applicationName"</span>: <span class="str">"my-app"</span> }'</pre>
+      </div>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/removeDeploymentReservation</span>
+        <span class="endpoint-desc">Remove a specific reservation</span>
+      </div>
+      <div class="endpoint-body">
+        <pre>curl -X POST https://app.nexlayer.com/removeDeploymentReservation \
+  -d '{ <span class="key">"sessionToken"</span>: <span class="str">"TOKEN"</span>, <span class="key">"applicationName"</span>: <span class="str">"my-app"</span> }'</pre>
+      </div>
+    </div>
+
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method method-post">POST</span>
+        <span class="endpoint-path">/removeReservations</span>
+        <span class="endpoint-desc">Remove all reservations for a session</span>
+      </div>
+      <div class="endpoint-body">
+        <pre>curl -X POST https://app.nexlayer.com/removeReservations \
+  -d '{ <span class="key">"sessionToken"</span>: <span class="str">"TOKEN"</span> }'</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guide: Custom Domains -->
+  <span class="section-anchor" id="guide-domain"></span>
+  <div class="section">
+    <h2>Guide — Custom Domains</h2>
+
+    <h3>Step 1: Add domain to nexlayer.yaml</h3>
+    <pre><span class="key">application</span>:
+  <span class="key">name</span>: <span class="val">my-app</span>
+  <span class="key">url</span>: <span class="val">www.mysite.com</span></pre>
+
+    <h3>Step 2: Configure DNS</h3>
+    <p>At your DNS provider (Cloudflare, Route 53, etc.):</p>
+
+    <p><strong>For www subdomain:</strong></p>
+    <pre>CNAME  www  cname.nexlayer.dev</pre>
+
+    <p><strong>For root apex domain:</strong></p>
+    <pre>A      @    76.76.21.21
+CNAME  www  cname.nexlayer.dev</pre>
+
+    <h3>Step 3: Deploy</h3>
+    <p>SSL is automatically provisioned on first request to the domain. No further action needed.</p>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">Ask Claude to set it up</div>
+      <p>Tell Claude: "Configure www.mysite.com as the domain for my-app". It will update nexlayer.yaml and guide you through the DNS setup.</p>
+    </div>
+  </div>
+
+  <!-- Guide: Scaling -->
+  <span class="section-anchor" id="guide-scaling"></span>
+  <div class="section">
+    <h2>Guide — Scaling &amp; Resources</h2>
+
+    <p>Nexlayer auto-scales by default based on CPU/memory. Set <code>replicas</code> to fix the count (disables auto-scale).</p>
+
+    <h3>Auto-scaling (default)</h3>
+    <pre><span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">api</span>
+    <span class="cmt"># no replicas field → Nexlayer auto-scales</span></pre>
+
+    <h3>Fixed replicas</h3>
+    <pre><span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">api</span>
+    <span class="key">replicas</span>: <span class="num">3</span></pre>
+
+    <h3>Custom resources</h3>
+    <pre><span class="key">pods</span>:
+  - <span class="key">name</span>: <span class="val">heavy-worker</span>
+    <span class="key">resources</span>:
+      <span class="key">cpu</span>: <span class="str">"2"</span>
+      <span class="key">memory</span>: <span class="str">"8Gi"</span></pre>
+
+    <h3>Best practices for scale</h3>
+    <ul>
+      <li><strong>Stateless design</strong> — store sessions in Redis, files in object storage</li>
+      <li><strong>Health endpoint</strong> — expose <code>/health</code> returning HTTP 200 when ready</li>
+      <li><strong>Graceful shutdown</strong> — handle SIGTERM to drain in-flight requests</li>
+      <li><strong>Databases</strong> — use a managed service for stateful, high-availability data</li>
+    </ul>
+  </div>
+
+  <!-- Guide: Service Discovery -->
+  <span class="section-anchor" id="guide-service-discovery"></span>
+  <div class="section">
+    <h2>Guide — Service Discovery</h2>
+    <p>Pods within the same deployment communicate via internal DNS: <code>&lt;pod-name&gt;.pod:&lt;port&gt;</code>.</p>
+
+    <pre><span class="cmt"># From any pod in the deployment:</span>
+postgres.pod:5432    <span class="cmt"># PostgreSQL</span>
+redis.pod:6379       <span class="cmt"># Redis</span>
+api.pod:8080         <span class="cmt"># Internal API</span>
+worker.pod:9000      <span class="cmt"># Background worker</span></pre>
+
+    <div class="callout callout-note">
+      <div class="callout-title">Internal only</div>
+      <p>Service discovery addresses are only resolvable within the deployment. They are not exposed externally. Only pods with a <code>path</code> accessible externally receive public traffic.</p>
+    </div>
+  </div>
+
+  <!-- Guide: Health Checks -->
+  <span class="section-anchor" id="guide-health"></span>
+  <div class="section">
+    <h2>Guide — Health Checks</h2>
+    <p>Expose a <code>/health</code> endpoint from your app. Nexlayer uses it to determine if a pod should receive traffic.</p>
+
+    <h3>Node.js / Express</h3>
+    <pre>app.get(<span class="str">'/health'</span>, (req, res) =&gt; res.json({ status: <span class="str">'ok'</span> }));</pre>
+
+    <h3>Python / FastAPI</h3>
+    <pre>@app.get(<span class="str">"/health"</span>)
+<span class="kw">def</span> health(): <span class="kw">return</span> {<span class="str">"status"</span>: <span class="str">"ok"</span>}</pre>
+
+    <h3>Go</h3>
+    <pre>http.HandleFunc(<span class="str">"/health"</span>, <span class="kw">func</span>(w http.ResponseWriter, r *http.Request) {
+  w.WriteHeader(http.StatusOK)
+  w.Write([]<span class="kw">byte</span>(<span class="str">`{"status":"ok"}`</span>))
+})</pre>
+
+    <p>Unhealthy instances are automatically removed from the load balancer and replaced.</p>
+  </div>
+
+</main>
+</div>
+
+<footer>
+  <span>nexlayer-better-docs.elizaga.dev</span>
+  <a href="https://nexlayer.com/docs" target="_blank" rel="noopener">Official Docs ↗</a>
+  <a href="https://github.com/nexlayer" target="_blank" rel="noopener">GitHub ↗</a>
+  <a href="https://github.com/jay-elizaga-dev/nexlayer-better-docs" target="_blank" rel="noopener">Source ↗</a>
+  <span style="margin-left: auto;">Built by <a href="https://elizaga.dev" target="_blank" rel="noopener">elizaga.dev</a></span>
+</footer>
+
+<script>
+function toggleTool(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function copyCode(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// Mobile menu
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+// Active nav tracking
+const navLinks = document.querySelectorAll('.nav-link');
+const anchors  = document.querySelectorAll('.section-anchor');
+
+function setActive() {
+  let current = '';
+  anchors.forEach(a => {
+    if (window.scrollY >= a.offsetTop - 120) current = a.id;
+  });
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href').slice(1);
+    link.classList.toggle('active', href === current);
+  });
+}
+
+window.addEventListener('scroll', setActive, { passive: true });
+setActive();
+</script>
+</body>
+</html>
