@@ -38,6 +38,8 @@
     </a>
   </div>
 
+  <a class="nav-mac-header" href="#mac-native-mcp">Mac Native MCP <span class="nav-badge">new</span></a>
+
   <div class="nav-section">
     <div class="nav-label">Getting Started</div>
     <a class="nav-link active" href="#overview">Overview</a>
@@ -78,6 +80,13 @@
     <a class="nav-link" href="#guide-service-discovery">Service Discovery</a>
     <a class="nav-link" href="#guide-health">Health Checks</a>
   </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Mac App</div>
+    <a class="nav-link" href="#mac-native-mcp">Mac Native MCP <span class="nav-badge">new</span></a>
+    <a class="nav-link" href="#mac-install">Install &amp; Run</a>
+    <a class="nav-link" href="#mac-features">Features</a>
+  </div>
 </nav>
 
 <!-- ── Main Content ───────────────────────────── -->
@@ -85,6 +94,9 @@
 
   <!-- Overview -->
   <span class="section-anchor" id="overview"></span>
+  <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.25);color:#eab308;font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.625rem;border-radius:4px;margin-bottom:1rem;">
+    ⚠ Dev Branch — nexlayer-better-docs-dev.elizaga.dev
+  </div>
   <div class="page-header">
     <h1 class="gradient-text">Nexlayer MCP — Better Docs</h1>
     <p>All MCP tools, parameters, and guides in one place. The reference the official docs should have been.</p>
@@ -105,6 +117,7 @@
     <a href="#tool-scale">update_replicas</a>
     <a href="#yaml-schema">YAML Schema</a>
     <a href="#api-deploy">API</a>
+    <button class="quick-nav-btn" id="helloWorldBtn">Hello World</button>
   </div>
 
   <div class="section">
@@ -996,6 +1009,123 @@ worker.pod:9000      <span class="cmt"># Background worker</span></pre>
     <p>Unhealthy instances are automatically removed from the load balancer and replaced.</p>
   </div>
 
+  <!-- Mac Native MCP -->
+  <span class="section-anchor" id="mac-native-mcp"></span>
+  <div class="section">
+    <h2>Mac Native MCP — Desktop Client</h2>
+    <p>A native macOS app for managing your Nexlayer deployments. Dark-mode SwiftUI, no Electron — connects directly to the Nexlayer MCP API using your API key.</p>
+    <div class="meta" style="margin-bottom:1.25rem;">
+      <span class="badge badge-blue">macOS 14+</span>
+      <span class="badge badge-green">SwiftUI</span>
+      <span class="badge badge-purple">Open Source</span>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+      <a href="https://github.com/jay-elizaga-dev/Nexlayer-mac-native-mcp" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent);color:#fff;font-size:0.875rem;font-weight:600;padding:0.5rem 1.125rem;border-radius:6px;text-decoration:none;">
+        ↓ Download / Clone on GitHub
+      </a>
+      <a href="https://github.com/jay-elizaga-dev/Nexlayer-mac-native-mcp/releases" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface);color:var(--text-primary);font-size:0.875rem;font-weight:600;padding:0.5rem 1.125rem;border-radius:6px;text-decoration:none;border:1px solid var(--border);">
+        Releases ↗
+      </a>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1.5rem;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+        <div>
+          <div style="font-size:1.25rem;margin-bottom:0.25rem;">🚀</div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">Live Deployment Status</div>
+          <div style="color:var(--text-muted);font-size:0.8125rem;">Per-deployment health pulled via MCP on click</div>
+        </div>
+        <div>
+          <div style="font-size:1.25rem;margin-bottom:0.25rem;">📋</div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">Pod Log Viewer</div>
+          <div style="color:var(--text-muted);font-size:0.8125rem;">Enter a pod name and stream logs in-app</div>
+        </div>
+        <div>
+          <div style="font-size:1.25rem;margin-bottom:0.25rem;">↺</div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">Rolling Restart</div>
+          <div style="color:var(--text-muted);font-size:0.8125rem;">One-click pod restart via MCP</div>
+        </div>
+        <div>
+          <div style="font-size:1.25rem;margin-bottom:0.25rem;">🔍</div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">Auto-Discovery</div>
+          <div style="color:var(--text-muted);font-size:0.8125rem;">Syncs your full deployment list from Nexlayer on login</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mac Install -->
+  <span class="section-anchor" id="mac-install"></span>
+  <div class="section">
+    <h2>Install &amp; Run</h2>
+    <p>Requirements: macOS 14.0 Sonoma or later, Xcode 15+ (for building from source).</p>
+
+    <h3>Option A — run.sh (quickest)</h3>
+    <pre><span class="cmt"># Clone the repo</span>
+git clone https://github.com/jay-elizaga-dev/Nexlayer-mac-native-mcp.git
+cd Nexlayer-mac-native-mcp
+
+<span class="cmt"># (Optional) pre-fill your API key so the login screen is pre-populated</span>
+echo "NEXLAYER_API_KEY=your_api_key" > dev.env
+
+<span class="cmt"># Build and open the app</span>
+./run.sh</pre>
+
+    <h3>Option B — Xcode</h3>
+    <pre><span class="cmt"># Open the Swift package in Xcode</span>
+open Package.swift
+
+<span class="cmt"># Set your API key at ~/.config/mac-native-mcp/dev.env</span>
+mkdir -p ~/.config/mac-native-mcp
+echo "NEXLAYER_API_KEY=your_api_key" > ~/.config/mac-native-mcp/dev.env</pre>
+    <p>Then press <kbd>⌘R</kbd> in Xcode to build and run.</p>
+
+    <h3>Get your Nexlayer API key</h3>
+    <p>Log in at <a href="https://app.nexlayer.com" target="_blank" rel="noopener">app.nexlayer.com</a> → Account → API Keys → Generate.</p>
+    <p>Or generate one via the MCP tool:</p>
+    <pre>nexlayer_generate_api_key</pre>
+
+    <div class="callout callout-note">
+      <div class="callout-title">Keychain persistence</div>
+      <p>Once you log in, the API key is stored in macOS Keychain (<code>dev.elizaga.mac-native-mcp</code>) and restored on relaunch — no need to re-enter it.</p>
+    </div>
+  </div>
+
+  <!-- Mac Features -->
+  <span class="section-anchor" id="mac-features"></span>
+  <div class="section">
+    <h2>Features</h2>
+
+    <h3>Deployment list (sidebar)</h3>
+    <p>The app pre-populates with your <code>amiable-beetle</code> namespace deployments. On login, it automatically calls <code>nexlayer_debug_namespace_info</code> and syncs any new deployments. The <strong>↻</strong> button in the sidebar header triggers a manual sync.</p>
+
+    <h3>Overview tab</h3>
+    <p>Clicking any deployment auto-fetches its status via <code>nexlayer_check_deployment_status</code>. Shows raw Nexlayer status output with a "last refreshed" timestamp. Use the Refresh button to re-poll or Restart to trigger a rolling pod restart.</p>
+
+    <h3>Logs tab</h3>
+    <p>Enter a pod name (e.g. <code>gitea-server-gitea-56577b6cb9-fctql</code>) and tap Fetch to pull logs via <code>nexlayer_get_deployment_logs</code>. Log output is selectable text.</p>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">Finding pod names</div>
+      <p>Use the Overview tab to get the raw namespace info, which lists current pod names in the PODS section. Copy the full pod name and paste it in the Logs tab.</p>
+    </div>
+
+    <h3>Secrets tab</h3>
+    <p>Nexlayer manages secrets via the <code>vars</code> block in <code>nexlayer.yaml</code> — there's no live secret-editing API. The Secrets tab links to <a href="https://app.nexlayer.com" target="_blank" rel="noopener">app.nexlayer.com</a> for dashboard access. To update a secret, edit your <code>nexlayer.yaml</code> and redeploy.</p>
+
+    <h3>MCP tools used</h3>
+    <table class="params-table" style="margin-top:0.75rem;">
+      <tr><th>Action</th><th>MCP Tool</th></tr>
+      <tr><td>Sync deployments</td><td class="param-name">nexlayer_debug_namespace_info</td></tr>
+      <tr><td>Deployment status</td><td class="param-name">nexlayer_check_deployment_status</td></tr>
+      <tr><td>Fetch logs</td><td class="param-name">nexlayer_get_deployment_logs</td></tr>
+      <tr><td>Rolling restart</td><td class="param-name">nexlayer_debug_pod_restart_deployment</td></tr>
+    </table>
+  </div>
+
 </main>
 </div>
 
@@ -1027,6 +1157,11 @@ function copyCode(btn, text) {
     }, 2000);
   });
 }
+
+document.getElementById('helloWorldBtn').addEventListener('click', () => {
+  console.log('echo hello world test ✓');
+  alert('echo hello world test ✓');
+});
 
 // Mobile menu
 document.getElementById('menuBtn').addEventListener('click', () => {
