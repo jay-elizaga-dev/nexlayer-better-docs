@@ -22,7 +22,7 @@ if (!API_TOKEN) {
   process.exit(1);
 }
 
-const PROJECT_DIR  = '/Users/jay/Home/projects/active/nexlayer-better-docs';
+const PROJECT_DIR  = '/Users/jay/Home/projects/nexlayer-projects/nexlayer-better-docs';
 
 const MIME = {
   '.html': 'text/html',
